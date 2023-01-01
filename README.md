@@ -19,7 +19,7 @@ possibility to serialize the parse tree to JSON (and the other way around).
 NuGet:
 
 ```xml
-<PackageReference Include="AntlrTreeRewriter" Version="1.0.3" />
+<PackageReference Include="AntlrTreeRewriter" Version="1.0.4" />
 ```
 
 produces:
