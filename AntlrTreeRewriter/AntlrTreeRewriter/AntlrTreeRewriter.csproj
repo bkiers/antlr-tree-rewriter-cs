@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>1.0.3</Version>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/bkiers/antlr-tree-rewriter</PackageProjectUrl>
+    <Description>A tool to compact/rewrite ANTLR generated parse trees</Description>
+    <Copyright>Copyright © Bart Kiers 2022</Copyright>
+    <Summary>
+      Version 4 of ANTLR produces parse trees (contrary to abstract syntax trees). Depending
+      on how your grammar is written, this can cause the parse tree to become large. This
+      library might help compact the parse tree and adds the possibility to serialize the
+      parse tree to JSON (and the other way around).
+    </Summary>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.11.1" />
+  </ItemGroup>
+
+</Project>
