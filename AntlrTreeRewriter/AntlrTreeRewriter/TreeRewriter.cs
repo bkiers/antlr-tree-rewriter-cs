@@ -93,7 +93,7 @@ public class TreeRewriter
         }
         else
         {
-          ast.AddChild(childAst);
+          ast.Children.Add(childAst);
         }
 
         this.BuildAst(childAst, childTree);

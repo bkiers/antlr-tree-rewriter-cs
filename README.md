@@ -19,7 +19,7 @@ possibility to serialize the parse tree to JSON (and the other way around).
 NuGet:
 
 ```xml
-<PackageReference Include="AntlrTreeRewriter" Version="1.0.4" />
+<PackageReference Include="AntlrTreeRewriter" Version="1.0.5" />
 ```
 
 ### Example
@@ -156,15 +156,15 @@ graph TD
 If you want to ignore certain tokens, like `(`, `)`, and `EOF` for example,
 you can do the following:
 
-```java
+```cs
 var source = "(3.14159265 + Mu) * 42";
 var lexer = new ExprLexer(CharStreams.fromString(source));
 var parser = new ExprParser(new CommonTokenStream(lexer));
 var root = parser.parse();
 
 var node = new TreeRewriter(root)
-  .ignore(ExprLexer.EOF, ExprLexer.OPAR, ExprLexer.CPAR)
-  .rewrite();
+  .Ignore(ExprLexer.Eof, ExprLexer.OPAR, ExprLexer.CPAR)
+  .Rewrite();
 ```
 
 and now `node` will represent the following tree:
@@ -201,16 +201,16 @@ graph TD
 
 you can do the following:
 
-```java
+```cs
 var source = "(3.14159265 + Mu) * 42";
 var lexer = new ExprLexer(CharStreams.fromString(source));
 var parser = new ExprParser(new CommonTokenStream(lexer));
 var root = parser.parse();
 
 var node = new TreeRewriter(root)
-  .ignore(ExprLexer.EOF, ExprLexer.OPAR, ExprLexer.CPAR)
-  .promote(ExprLexer.ADD, ExprLexer.MIN, ExprLexer.MUL, ExprLexer.DIV, ExprLexer.MOD, ExprLexer.AND, ExprLexer.OR)
-  .rewrite();
+  .Ignore(ExprLexer.Eof, ExprLexer.OPAR, ExprLexer.CPAR)
+  .Promote(ExprLexer.ADD, ExprLexer.MIN, ExprLexer.MUL, ExprLexer.DIV, ExprLexer.MOD, ExprLexer.AND, ExprLexer.OR)
+  .Rewrite();
 ```
 
 which will result in `node` looking likt this:
@@ -236,10 +236,10 @@ graph TD
 
 and you do promote both the `+` and `-` tokens:
 
-```java
+```cs
 var node = new TreeRewriter(root)
-  .promote(ExprLexer.ADD, ExprLexer.MIN)
-  .rewrite();
+  .Promote(ExprLexer.ADD, ExprLexer.MIN)
+  .Rewrite();
 ```
 
 then the first token that is encountered (`+` in this case) will become 
@@ -258,9 +258,10 @@ graph TD
 The `TreeNode` class can be easily used to (de) serialize from and to
 JSON:
 
-```java
-@Test
-public void jsonTest() {
+```cs
+[Fact]
+public void JsonDemo()
+{
   var source = "(3.14159265 + Mu) * 42";
 
   var lexer = new ExprLexer(CharStreams.fromString(source));
@@ -268,21 +269,20 @@ public void jsonTest() {
   var root = parser.parse();
 
   var node = new TreeRewriter(root)
-      .ignore(ExprLexer.EOF, ExprLexer.OPAR, ExprLexer.CPAR)
-      .promote(ExprLexer.ADD, ExprLexer.MIN, ExprLexer.MUL, ExprLexer.DIV, ExprLexer.MOD, ExprLexer.AND, ExprLexer.OR)
-      .rewrite();
+    .Ignore(ExprLexer.Eof, ExprLexer.OPAR, ExprLexer.CPAR)
+    .Promote(ExprLexer.ADD, ExprLexer.MIN, ExprLexer.MUL, ExprLexer.DIV, ExprLexer.MOD, ExprLexer.AND, ExprLexer.OR)
+    .Rewrite();
+  
+  var json = JsonConvert.SerializeObject(node);
 
-  var gson = new Gson();
-  var json = gson.toJson(node);
+  Assert.Equal("{\"Label\":\"*\",\"TokenType\":3,\"Line\":1,\"StartIndex\":18,\"StopIndex\":18,\"Children\":[{\"Label\":\"+\",\"TokenType\":1,\"Line\":1,\"StartIndex\":12,\"StopIndex\":12,\"Children\":[{\"Label\":\"3.14159265\",\"TokenType\":11,\"Line\":1,\"StartIndex\":1,\"StopIndex\":10,\"Children\":[]},{\"Label\":\"Mu\",\"TokenType\":10,\"Line\":1,\"StartIndex\":14,\"StopIndex\":15,\"Children\":[]}]},{\"Label\":\"42\",\"TokenType\":11,\"Line\":1,\"StartIndex\":20,\"StopIndex\":21,\"Children\":[]}]}", json);
 
-  Assert.assertEquals("{\"label\":\"*\",\"tokenType\":3,\"children\":[{\"label\":\"+\",\"tokenType\":1,\"children\":[{\"label\":\"3.14159265\",\"tokenType\":11,\"children\":[]},{\"label\":\"Mu\",\"tokenType\":10,\"children\":[]}]},{\"label\":\"42\",\"tokenType\":11,\"children\":[]}]}", json);
+  var deserializedNode = JsonConvert.DeserializeObject<TreeNode>(json);
 
-  var deserializedNode = gson.fromJson(json, TreeNode.class);
-
-  Assert.assertEquals("*", deserializedNode.getLabel());
-  Assert.assertEquals("+", deserializedNode.getChildren().get(0).getLabel());
-  Assert.assertEquals("3.14159265", deserializedNode.getChildren().get(0).getChildren().get(0).getLabel());
-  Assert.assertEquals("Mu", deserializedNode.getChildren().get(0).getChildren().get(1).getLabel());
-  Assert.assertEquals("42", deserializedNode.getChildren().get(1).getLabel());
+  Assert.Equal("*", deserializedNode.Label);
+  Assert.Equal("+", deserializedNode.Children[0].Label);
+  Assert.Equal("3.14159265", deserializedNode.Children[0].Children[0].Label);
+  Assert.Equal("Mu", deserializedNode.Children[0].Children[1].Label);
+  Assert.Equal("42", deserializedNode.Children[1].Label);
 }
 ```

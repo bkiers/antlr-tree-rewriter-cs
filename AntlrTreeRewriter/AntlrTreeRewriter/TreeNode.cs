@@ -7,8 +7,6 @@ using Antlr4.Runtime.Tree;
 
 public class TreeNode
 {
-  private readonly IList<TreeNode> children = new List<TreeNode>();
-
   public TreeNode()
   {
   }
@@ -16,11 +14,6 @@ public class TreeNode
   public TreeNode(IParseTree tree)
   {
     this.SetParseTree(tree);
-  }
-
-  public void AddChild(TreeNode child)
-  {
-    this.children.Add(child);
   }
 
   public void SetParseTree(IParseTree tree)
@@ -39,27 +32,27 @@ public class TreeNode
     }
   }
 
-  public string? Label { get; private set; }
+  public string? Label { get; set; }
   
-  public int? TokenType { get; private set; }
+  public int? TokenType { get; set; }
   
-  public int? Line { get; private set; }
+  public int? Line { get; set; }
   
-  public int? StartIndex { get; private set; }
+  public int? StartIndex { get; set; }
   
-  public int? StopIndex { get; private set; }
+  public int? StopIndex { get; set; }
 
-  public IList<TreeNode> Children => new List<TreeNode>(this.children);
+  public IList<TreeNode> Children { get; set; } = new List<TreeNode>();
 
   public override string ToString()
   {
-    var includeParens = this.children.Count > 0;
+    var includeParens = this.Children.Count > 0;
 
     var builder = new StringBuilder()
         .Append(includeParens ? "(" : "")
         .Append(this.Label);
 
-    foreach (var child in this.children)
+    foreach (var child in this.Children)
     {
       builder.Append(' ').Append(child);
     }
