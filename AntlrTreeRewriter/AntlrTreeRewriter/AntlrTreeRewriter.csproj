@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <Version>1.0.5</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/bkiers/antlr-tree-rewriter</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/bkiers/antlr-tree-rewriter-cs</PackageProjectUrl>
     <Description>A tool to compact/rewrite ANTLR generated parse trees</Description>
     <Copyright>Copyright © Bart Kiers 2022</Copyright>
     <Summary>
