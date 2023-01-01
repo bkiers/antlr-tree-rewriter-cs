@@ -22,15 +22,6 @@ NuGet:
 <PackageReference Include="AntlrTreeRewriter" Version="1.0.4" />
 ```
 
-produces:
-
-```mermaid
-graph TD
-
-  N_62474978["+"] --> N_64379541["a"]
-  N_62474978["+"] --> N_2086040["b"]
-```
-
 ### Example
 
 Given the following ANTLR grammar:
