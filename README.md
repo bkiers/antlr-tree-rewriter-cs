@@ -131,7 +131,7 @@ var lexer = new ExprLexer(CharStreams.fromString(source));
 var parser = new ExprParser(new CommonTokenStream(lexer));
 var root = parser.parse();
 
-var node = new TreeRewriter(root).rewrite();
+var node = new TreeRewriter(root).Rewrite();
 ```
 
 and `node` will now represent the following tree:
